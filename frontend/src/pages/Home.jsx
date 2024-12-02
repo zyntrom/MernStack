@@ -1,79 +1,63 @@
-import React, {useEffect,useState} from 'react'
-import axios from 'axios'
-import Spinner from '../componets/Spinner'
-import {Link} from 'react-router-dom'
-import {AioutlineEdit} from 'react-icons/ai'
-import {BSInfoCircle} from 'react-icons/bs'
-import {MdOutlineAddBox,MdOutlineDelete} from 'react-icons/md'
-const Home = () => {
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import Spinner from '../components/Spinner';
+import { Link } from 'react-router-dom';
+import { AiOutlineEdit } from 'react-icons/ai';
+import { BsInfoCircle } from 'react-icons/bs';
+import { MdOutlineAddBox, MdOutlineDelete } from 'react-icons/md';
+import BooksTable from '../components/home/BooksTable';
+import BooksCard from '../components/home/BooksCard';
 
-  const [books,setBooks]= useState([]);
-  const [loading,setLoading]= useState(false);
-  useEffect(()=>{
+const Home = () => {
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showType, setShowType] = useState('table');
+
+  useEffect(() => {
     setLoading(true);
     axios
-      .get('https://localhost:5555/books')
-      .then((response)=>{
+      .get('http://localhost:5555/books')
+      .then((response) => {
         setBooks(response.data.data);
         setLoading(false);
       })
-      .catch((error)=>{
+      .catch((error) => {
         console.log(error);
         setLoading(false);
       });
-  })
+  }, []);
+
   return (
     <div className='p-4'>
-      <div className= 'flex justify-between items-center'>
+      <div className='flex justify-center items-center gap-x-4'>
+        <button
+          className='bg-sky-300 hover:bg-sky-600 px-4 py-1 rounded-lg'
+          onClick={() => setShowType('table')}
+        >
+          Table
+        </button>
+        <button
+          className='bg-sky-300 hover:bg-sky-600 px-4 py-1 rounded-lg'
+          onClick={() => setShowType('card')}
+        >
+          Card
+        </button>
+      </div>
+      <div className='flex justify-between items-center'>
         <h1 className='text-3xl my-8'>Books List</h1>
-          <link to='/books/create'>
-            <MdOutlineAddBox className='text-sky-800 text-4x1'/>
-          </link>
+        <Link to='/books/create'>
+          <MdOutlineAddBox className='text-sky-800 text-4xl' />
+        </Link>
       </div>
       {loading ? (
         <Spinner />
+      ) : showType === 'table' ? (
+        <BooksTable books={books} />
       ) : (
-          <table className='w-full border-separate border-spacing-2'>
-            <thead>
-              <tr>
-                <th className='border border-slate-600 round-md'>No</th>
-                <th className='border border-slate-600 round-md'>Title</th>
-                <th className='border border-slate-600 round-md max-md:hidden'>Auther</th>
-                <th className='border border-slate-600 round-md max-md:hidden'>Publish Year</th>
-                <th className='border border-slate-600 round-md'>Operations</th>
-              </tr>
-              {books.map(()=>{
-                <tr key={books._id} className='h-8'>
-                  <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
-                    {index +1}
-                  </td>
-                  <td className='border border-slate-700 rounded-md text-center'>
-                    {books.title}
-                  </td>
-                  <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
-                    {books.auther}
-                  </td>
-                  <td className='border border-slate-700 rounded-md text-center max-md:hidden'>
-                    {books.publishYear}
-                  </td>
-                  <td className='border border-slate-700 rounded-md text-centern'>
-                    <div className='flex justify-center gap-x-4'>
-                      <Link typeof={`(/books/details/${book._id}`}>
-                        <BsInfoCircle className='text-2x1 text-green-800'/>
-                      </Link>
-                      <Link>
-                        
-                      </Link>
-                    </div>
-                  </td>
-
-                </tr>
-              })}
-            </thead>
-          </table>
+        <BooksCard books={books} />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

@@ -9,7 +9,7 @@ router.post('/',async (request,response)=>{
     try{
         if(
             !request.body.title ||
-            !request.body.auther ||
+            !request.body.author ||
             !request.body.publishYear
         ){
             return response.status(400).send({
@@ -19,7 +19,7 @@ router.post('/',async (request,response)=>{
 
         const newBook ={
             title: request.body.title,
-            auther:request.body.auther,
+            author:request.body.author,
             publishYear:request.body.publishYear
         }
 
@@ -58,7 +58,7 @@ router.put('/:id',async (request,response)=>{
     try{
         if(
             !request.body.title ||
-            !request.body.auther ||
+            !request.body.author ||
             !request.body.publishYear
         ){
             return response.status(400).send({

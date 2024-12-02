@@ -2,17 +2,23 @@ import express, { response } from "express";
 import { PORT,mongoDBURL } from "./config.js";
 import mongoose from "mongoose";
 import booksRoutes from './routes/booksRoutes.js'
+import cors from "cors";
+
+
 
 
 
 const app=express();
 
 app.use(express.json());
+app.use(cors());
 // app.use(cors({
 //     origin:"http://localhost:3000",
 //     methods:["GET","POST","PUT","DELETE"],
 //     allowedHeaders:['Contend-Type'],
 // }));
+
+
 
 app.get('/',(request,response)=>{
     return response.status(234).send("Welcome to Mern stack");
